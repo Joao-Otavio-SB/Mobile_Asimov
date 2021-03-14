@@ -11,14 +11,16 @@ class contPessoas extends StatefulWidget {
 
 class _HomeState extends State<contPessoas> {
   int _people = 0;
+  int maxPeople = 10;
   String _capacity = "Pode Entar!";
+  TextEditingController resCapacity = TextEditingController();
   Color textColor = Colors.green;
 
   void _numberPeople(int n) {
     setState(() {
       _people += n;
 
-      if (_people == 10) {
+      if (_people == maxPeople) {
         _capacity = "Lotado!";
         textColor = Colors.red;
       } else {
@@ -26,6 +28,15 @@ class _HomeState extends State<contPessoas> {
         textColor = Colors.green;
       }
     });
+  }
+
+  void raiseCapacity() {
+    maxPeople = int.parse(resCapacity.text);
+    if (_people > maxPeople) {
+      setState(() {
+        _people = maxPeople;
+      });
+    }
   }
 
   @override
@@ -71,7 +82,7 @@ class _HomeState extends State<contPessoas> {
                     padding: EdgeInsets.fromLTRB(50, 0, 0, 0),
                     child: TextButton(
                         onPressed: () {
-                          if (_people < 10) {
+                          if (_people < maxPeople) {
                             _numberPeople(1);
                           }
                         },
@@ -92,6 +103,40 @@ class _HomeState extends State<contPessoas> {
                         fontWeight: FontWeight.bold,
                         shadows: [Shadow(offset: Offset(2, 2))])),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text("Aumentar capacidade"),
+                              content: TextField(
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: "Quantidade de pessoas",
+                                ),
+                                controller: resCapacity,
+                              ),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Cancelar")),
+                                TextButton(
+                                    onPressed: () {
+                                      raiseCapacity();
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Ok"))
+                              ],
+                            );
+                          });
+                    },
+                    child: Text("Alterar capacidade")),
+              )
             ],
           ),
           Positioned(
@@ -133,7 +178,8 @@ class _State extends State<Imc> {
       double weight = double.parse(weightController.text);
 
       double imc = weight / (height * height);
-      double healthWeight = 24.9 * (height * height);;
+      double healthWeight = 24.9 * (height * height);
+      ;
 
       if (imc < 18.5) {
         healthWeight = 18.5 * (height * height);
@@ -143,7 +189,6 @@ class _State extends State<Imc> {
         _Info =
             "Parabéns! Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como peso saudável";
       } else if (imc >= 25 && imc < 30) {
-
         _Info =
             "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como sobrepeso\nVocê precisa ter no máximo ${healthWeight.toStringAsPrecision(2)} Kg para alcançar um IMC saudável";
       } else if (imc >= 30 && imc < 40) {
