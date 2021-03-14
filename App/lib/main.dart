@@ -133,22 +133,25 @@ class _State extends State<Imc> {
       double weight = double.parse(weightController.text);
 
       double imc = weight / (height * height);
+      double healthWeight = 24.9 * (height * height);;
 
       if (imc < 18.5) {
+        healthWeight = 18.5 * (height * height);
         _Info =
-            "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como abaixo do peso";
+            "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como abaixo do peso\nVocê precisa ter no mínimo ${healthWeight.toStringAsPrecision(2)} Kg para alcançar um IMC saudável";
       } else if (imc >= 18.5 && imc < 25) {
         _Info =
-            "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como peso normal";
+            "Parabéns! Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como peso saudável";
       } else if (imc >= 25 && imc < 30) {
+
         _Info =
-            "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como sobrepeso";
+            "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como sobrepeso\nVocê precisa ter no máximo ${healthWeight.toStringAsPrecision(2)} Kg para alcançar um IMC saudável";
       } else if (imc >= 30 && imc < 40) {
         _Info =
-            "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como obesidade";
+            "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como obesidade\nVocê precisa ter no máximo ${healthWeight.toStringAsPrecision(2)} Kg para alcançar um IMC saudável";
       } else if (imc >= 40) {
         _Info =
-            "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como obesidade grave";
+            "Você está com um IMC de: ${imc.toStringAsPrecision(4)}\nsendo classificado como obesidade grave\nVocê precisa ter no máximo ${healthWeight.toStringAsPrecision(2)} Kg para alcançar um IMC saudável";
       }
     });
     _resetField();
@@ -172,7 +175,7 @@ class _State extends State<Imc> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.person_outline, size: 120, color: Colors.blue),
+                  Image.asset("img/calc.png", width: 75, height: 75),
                   TextFormField(
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
